@@ -18,6 +18,7 @@ public class Transaction {
     private LocalDate date;
 
     @ManyToOne
+    @JoinColumn(name = "user_id")
     private User user;
 
     public Long getId() {
