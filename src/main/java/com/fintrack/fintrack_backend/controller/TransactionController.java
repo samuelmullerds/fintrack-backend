@@ -19,7 +19,7 @@ public class TransactionController {
     }
 
     @PostMapping
-    public Transaction createTransaction(@RequestBody Transaction transaction, @RequestParam Long userId) {
+    public Transaction createTransaction(@RequestBody Transaction transaction, @PathVariable Long userId) {
         return transactionService.createTransaction(transaction, userId);
     }
 
