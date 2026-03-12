@@ -7,8 +7,12 @@ import com.fintrack.fintrack_backend.security.JwtService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import com.fintrack.fintrack_backend.dto.LoginResponse;
+import com.fintrack.fintrack_backend.dto.UserProfileResponse;
+
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 
 @RestController
 @RequestMapping("/auth")
@@ -43,4 +47,20 @@ public class AuthController {
             token
         );
     }
-}
+
+    @GetMapping("/me")
+    public UserProfileResponse getCurrentUser(Authentication authentication) {
+
+        String email = authentication.getName();
+
+        User user = userRepository.findByEmail(email)
+            .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+
+        return new UserProfileResponse(
+            user.getId(),
+            user.getName(),
+            user.getEmail()
+        );
+    }
+    }
+
