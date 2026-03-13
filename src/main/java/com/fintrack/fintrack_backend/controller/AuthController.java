@@ -12,10 +12,14 @@ import com.fintrack.fintrack_backend.dto.UserProfileResponse;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
+
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import io.swagger.v3.oas.annotations.Parameter;
 
 @RestController
 @RequestMapping("/auth")
+@Tag(name = "Authentication", description = "Endpoints para autenticação de usuários")
 public class AuthController {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
@@ -28,7 +32,8 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public LoginResponse login(@RequestBody LoginRequest request) {
+    @Operation(summary = "Realizar login", description = "Autentica um usuário e retorna um token de acesso")
+    public LoginResponse login(@Parameter(description = "Dados de login do usuário") @RequestBody LoginRequest request) {
         
         User user = userRepository.findByEmail(request.getEmail())
             .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found"));
@@ -49,6 +54,7 @@ public class AuthController {
     }
 
     @GetMapping("/me")
+    @Operation(summary = "Obter informações do usuário logado", description = "Retorna as informações do usuário autenticado")
     public UserProfileResponse getCurrentUser(Authentication authentication) {
 
         String email = authentication.getName();
