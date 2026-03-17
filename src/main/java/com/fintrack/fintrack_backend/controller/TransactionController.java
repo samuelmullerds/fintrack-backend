@@ -8,11 +8,14 @@ import com.fintrack.fintrack_backend.dto.DashboardResponse;
 import com.fintrack.fintrack_backend.dto.TransactionResponseDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 
 import jakarta.validation.Valid;    
 
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Security;
 import java.util.List;
 @RestController
 @RequestMapping("/transactions")
@@ -39,9 +42,11 @@ public class TransactionController {
         return transactionService.updateTransaction(id, transaction);
     }
 
-    @GetMapping("/user/{userId}")
-    public List<Transaction> getTransactionsByUser(@PathVariable Long userId) {
-        return transactionService.getTransactionsByUser(userId);
+    @GetMapping
+    public List<Transaction> getTransactions(){
+
+        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+        return transactionService.getTransactionsByEmail(email);
     }
 
     @GetMapping("dashboard/{userId}")
