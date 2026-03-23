@@ -7,6 +7,7 @@ import com.fintrack.fintrack_backend.security.JwtService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import com.fintrack.fintrack_backend.dto.LoginResponse;
+import com.fintrack.fintrack_backend.dto.RegisterRequest;
 import com.fintrack.fintrack_backend.dto.UserProfileResponse;
 
 import org.springframework.web.server.ResponseStatusException;
@@ -17,6 +18,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import io.swagger.v3.oas.annotations.Parameter;
 
+@CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/auth")
 @Tag(name = "Authentication", description = "Endpoints para autenticação de usuários")
@@ -40,7 +42,7 @@ public class AuthController {
         
         boolean passwordMatch = passwordEncoder.matches(request.getPassword(), user.getPassword());
         if (!passwordMatch) {
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid email or password");
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Email ou senha inválidos");
         }
 
         String token = jwtService.generateToken(user.getEmail());
@@ -51,6 +53,24 @@ public class AuthController {
             user.getEmail(),
             token
         );
+    }
+
+    @PostMapping("/register")
+    @Operation(summary = "Registrar novo usuário", description = "Cria um novo usuário com as informações fornecidas")
+    public void register(@RequestBody RegisterRequest request) {
+
+        boolean exists = userRepository.findByEmail(request.getEmail()).isPresent();
+
+        if (exists) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Email já está em uso");
+        }
+
+        User user = new User();
+        user.setName(request.getName());
+        user.setEmail(request.getEmail());
+        user.setPassword(passwordEncoder.encode(request.getPassword()));
+
+        userRepository.save(user);
     }
 
     @GetMapping("/me")
