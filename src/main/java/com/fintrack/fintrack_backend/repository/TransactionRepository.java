@@ -23,6 +23,6 @@ Double sumExpenseByUser(@Param("userId") Long userId);
        "FROM Transaction t WHERE t.user.id = :userId AND t.type = 'expense' GROUP BY t.category")
 List<CategorySummaryResponse> getExpenseSummaryByUser(@Param("userId") Long userId);
 
-Page<Transaction> findByUserId(Long userId, Pageable pegeable);
+Page<Transaction> findByUserId(Long userId, Pageable pageable);
 }
 

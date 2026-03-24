@@ -16,7 +16,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.lang.NonNull;
 
-import java.util.ArrayList;
 import java.util.List;
 @Service
 
@@ -29,7 +28,7 @@ public class TransactionService {
         this.userRepository = userRepository;
     }
 
-        public Transaction createTransaction(CreateTransactionDTO dto, @NonNull Long userId){
+        public TransactionResponseDTO createTransaction(CreateTransactionDTO dto, @NonNull Long userId){
 
             Transaction transaction = new Transaction();
             transaction.setDescription(dto.getDescription());
@@ -40,49 +39,48 @@ public class TransactionService {
 
             User user = userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException("User not found"));
             transaction.setUser(user);
-            return transactionRepository.save(transaction);
+            Transaction saved = transactionRepository.save(transaction);
+            return new TransactionResponseDTO(
+                saved.getId(),
+                saved.getDescription(),
+                saved.getAmount(),
+                saved.getCategory(),
+                saved.getType(),
+                saved.getDate()
+            );
         }
     
-    
-
-    public List<TransactionResponseDTO> getAllTransactions(){
-
-        List<Transaction> transactions = transactionRepository.findAll();
-        
-        List<TransactionResponseDTO> response = new ArrayList<>();
-        
-        for (Transaction t : transactions){
-        TransactionResponseDTO dto = new TransactionResponseDTO(
-            
-            t.getId(),
-            t.getDescription(),
-            t.getAmount(),
-            t.getCategory(),
-            t.getType(),
-            t.getDate()
-        );
-            response.add(dto);
-        }
-        return response;
-    }
-
-    public void deleteTransaction(@NonNull Long id){
-        transactionRepository.deleteById(id);
-    }
-
-    public Transaction updateTransaction(@NonNull Long id, Transaction updateTransaction){
+    public void deleteTransaction(@NonNull Long id, Long userId){
         Transaction transaction = transactionRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Transaction not found"));
 
-        transaction.setDescription(updateTransaction.getDescription());
-        transaction.setAmount(updateTransaction.getAmount());
-        transaction.setCategory(updateTransaction.getCategory());
-        transaction.setDate(updateTransaction.getDate());
-
-        return transactionRepository.save(transaction);
+        if (!transaction.getUser().getId().equals(userId)){
+            throw new ResourceNotFoundException("Acesso negado");
+        }
+        transactionRepository.delete(transaction);
     }
 
-    public List<Transaction> getTransactionsByUser(Long userId) {
-        return transactionRepository.findByUserId(userId);
+    public TransactionResponseDTO updateTransaction(@NonNull Long id, CreateTransactionDTO dto, Long userId){
+        Transaction transaction = transactionRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Transaction not found"));
+
+        if (!transaction.getUser().getId().equals(userId)){
+            throw new ResourceNotFoundException("Acesso negado");
+        }
+
+        transaction.setDescription(dto.getDescription());
+        transaction.setAmount(dto.getAmount());
+        transaction.setCategory(dto.getCategory());
+        transaction.setType(dto.getType());
+        transaction.setDate(dto.getDate());
+
+        Transaction updatedTransaction = transactionRepository.save(transaction);
+        return new TransactionResponseDTO(
+            updatedTransaction.getId(),
+            updatedTransaction.getDescription(),
+            updatedTransaction.getAmount(),
+            updatedTransaction.getCategory(),
+            updatedTransaction.getType(),
+            updatedTransaction.getDate()
+        );
     }
 
     public DashboardResponse getDashboard(Long userId){

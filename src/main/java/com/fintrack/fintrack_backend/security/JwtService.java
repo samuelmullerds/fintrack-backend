@@ -13,12 +13,12 @@ public class JwtService {
 
     private static final String SECRET = "fintrack-secret";
 
-    public String generateToken(String email){
+    public String generateToken(Long userId){
 
         Algorithm algorithm = Algorithm.HMAC256(SECRET);
 
         return JWT.create()
-                .withSubject(email)
+                .withSubject(userId.toString())
                 .withExpiresAt(new Date(System.currentTimeMillis() + 86400000))
                 .sign(algorithm);
     }
