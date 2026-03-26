@@ -18,7 +18,6 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import io.swagger.v3.oas.annotations.Parameter;
 
-@CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/auth")
 @Tag(name = "Authentication", description = "Endpoints para autenticação de usuários")
@@ -38,7 +37,7 @@ public class AuthController {
     public LoginResponse login(@Parameter(description = "Dados de login do usuário") @RequestBody LoginRequest request) {
         
         User user = userRepository.findByEmail(request.getEmail())
-            .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found"));
+            .orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Email ou senha inválidos"));
         
         boolean passwordMatch = passwordEncoder.matches(request.getPassword(), user.getPassword());
         if (!passwordMatch) {
@@ -80,7 +79,7 @@ public class AuthController {
         String email = authentication.getName();
 
         User user = userRepository.findByEmail(email)
-            .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+            .orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Email ou senha inválidos"));
 
         return new UserProfileResponse(
             user.getId(),
