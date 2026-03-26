@@ -1,9 +1,9 @@
 package com.fintrack.fintrack_backend.controller;
 
 import com.fintrack.fintrack_backend.dto.UserProfileResponse;
-import com.fintrack.fintrack_backend.dto.UserProfileResponsex;
 import com.fintrack.fintrack_backend.service.UserService;
 import org.springframework.web.bind.annotation.*;
+import com.fintrack.fintrack_backend.dto.RegisterRequest;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;

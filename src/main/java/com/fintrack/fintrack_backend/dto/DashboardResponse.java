@@ -1,38 +1,38 @@
 package com.fintrack.fintrack_backend.dto;
 
 public class DashboardResponse {
-    private double Income;
-    private double Expense;
-    private double Balance;
+    private double income;
+    private double expense;
+    private double balance;
 
     public DashboardResponse(double balance, double income, double expense) {
-        this.Balance = balance;
-        this.Income = income;
-        this.Expense = expense;
+        this.balance = balance;
+        this.income = income;
+        this.expense = expense;
     }
 
     public double getIncome() {
-        return Income;
+        return income;
     }
 
     public void setIncome(double income) {
-        Income = income;
+        this.income = income;
     }
 
     public double getExpense(){
-        return Expense;
+        return expense;
     }
 
     public void setExpense(double expense){
-        Expense = expense;
+        this.expense = expense;
     }
 
     public double getBalance() {
-        return Balance;
+        return balance;
     }
 
     public void setBalance(double balance) {
-        Balance = balance;
+        this.balance = balance;
     }
     
 }

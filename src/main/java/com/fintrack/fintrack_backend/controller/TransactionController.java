@@ -1,6 +1,5 @@
 package com.fintrack.fintrack_backend.controller;
 
-import com.fintrack.fintrack_backend.model.Transaction;
 import com.fintrack.fintrack_backend.service.TransactionService;
 import com.fintrack.fintrack_backend.dto.CategorySummaryResponse;
 import com.fintrack.fintrack_backend.dto.CreateTransactionDTO;
@@ -9,7 +8,6 @@ import com.fintrack.fintrack_backend.dto.TransactionResponseDTO;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 
 import io.swagger.v3.oas.annotations.Operation;
