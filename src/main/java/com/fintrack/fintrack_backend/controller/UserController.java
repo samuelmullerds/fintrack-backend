@@ -1,6 +1,7 @@
 package com.fintrack.fintrack_backend.controller;
 
-import com.fintrack.fintrack_backend.model.User;
+import com.fintrack.fintrack_backend.dto.UserProfileResponse;
+import com.fintrack.fintrack_backend.dto.UserProfileResponsex;
 import com.fintrack.fintrack_backend.service.UserService;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,13 +23,13 @@ public class UserController {
 
     @Operation(summary = "Criar novo usuário", description = "Cria um novo usuário no sistema")
     @PostMapping
-    public User createUser(@Parameter(description = "Dados do usuário a ser criado") @RequestBody User user) {
-        return userService.createUser(user);
+    public UserProfileResponse createUser(@Parameter(description = "Dados do usuário a ser criado") @RequestBody RegisterRequest request) {
+        return userService.createUser(request);
     }
 
     @Operation(summary = "Listar todos os usuários", description = "Retorna uma lista de todos os usuários cadastrados no sistema")
     @GetMapping
-    public List<User> getAllUsers() {
+    public List<UserProfileResponse> getAllUsers() {
         return userService.getAllUsers();
     }
 }

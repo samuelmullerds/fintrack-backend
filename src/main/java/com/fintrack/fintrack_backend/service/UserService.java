@@ -4,7 +4,10 @@ import com.fintrack.fintrack_backend.model.User;
 import com.fintrack.fintrack_backend.repository.UserRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import com.fintrack.fintrack_backend.dto.RegisterRequest;
+import com.fintrack.fintrack_backend.dto.UserProfileResponse;
 
+import java.util.stream.Collectors;     
 import java.util.List;
 @Service
 
@@ -17,14 +20,20 @@ public class UserService {
         this.passwordEncoder = passwordEncoder;
     }
 
-    public User createUser(User user) {
-        String encodedPassword = passwordEncoder.encode(user.getPassword());
+    public UserProfileResponse createUser(RegisterRequest request) {
+        User user = new User();
+        user.setName(request.getName());
+        user.setEmail(request.getEmail());
+        String encodedPassword = passwordEncoder.encode(request.getPassword());
         user.setPassword(encodedPassword);
-        return userRepository.save(user);
+        User saved = userRepository.save(user);
+        return new UserProfileResponse(saved.getId(), saved.getName(), saved.getEmail());
     }
 
-    public List<User> getAllUsers() {
-        return userRepository.findAll();
+    public List<UserProfileResponse> getAllUsers() {
+        return userRepository.findAll().stream()
+                .map(u -> new UserProfileResponse(u.getId(), u.getName(), u.getEmail()))
+                .collect(Collectors.toList());
     }
 
 }
