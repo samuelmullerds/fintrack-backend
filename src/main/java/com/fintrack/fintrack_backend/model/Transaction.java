@@ -1,8 +1,11 @@
 package com.fintrack.fintrack_backend.model;
 
 import jakarta.persistence.*;
+
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fintrack.fintrack_backend.dto.TransactionType;
 
 @Entity
 public class Transaction {
@@ -12,11 +15,11 @@ public class Transaction {
 
     private String description;
 
-    private Double amount;
+    private BigDecimal amount;
 
     private String category;
 
-    private String type;
+    private TransactionType type;
 
     private LocalDate date;
 
@@ -41,11 +44,11 @@ public class Transaction {
         this.description = description;
     }
 
-    public Double getAmount() {
+    public BigDecimal getAmount() {
         return amount;
     }
 
-    public void setAmount(Double amount) {
+    public void setAmount(BigDecimal amount) {
         this.amount = amount;
     }
 
@@ -57,11 +60,11 @@ public class Transaction {
         this.category = category;
     }
 
-    public String getType() {
+    public TransactionType getType() {
         return type;
     }
 
-    public void setType(String type) {
+    public void setType(TransactionType type) {
         this.type = type;
     }
 

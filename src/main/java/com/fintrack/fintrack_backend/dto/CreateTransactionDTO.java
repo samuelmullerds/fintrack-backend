@@ -3,21 +3,22 @@ package com.fintrack.fintrack_backend.dto;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 
 public class CreateTransactionDTO {
     @NotBlank
     private String description;
     @NotNull @Positive
-    private Double amount;
+    private BigDecimal amount;
     @NotBlank
     private String category;
     @NotBlank
-    private String type;
+    private TransactionType type;
     @NotNull
     private LocalDate date;
 
-    public CreateTransactionDTO(String description, Double amount, String category, String type, LocalDate date){
+    public CreateTransactionDTO(String description, BigDecimal amount, String category, TransactionType type, LocalDate date){
         this.description = description;
         this.amount = amount;
         this.category = category;
@@ -33,11 +34,11 @@ public class CreateTransactionDTO {
         this.description = description;
     }
 
-    public Double getAmount(){
+    public BigDecimal getAmount(){
         return amount;
     }
 
-    public void setAmount(Double amount){
+    public void setAmount(BigDecimal amount){
         this.amount = amount;
     }
 
@@ -49,11 +50,11 @@ public class CreateTransactionDTO {
         this.category = category;
     }
 
-    public String getType(){
+    public TransactionType getType(){
     return type;
     }
 
-    public void setType(String type){
+    public void setType(TransactionType type){
         this.type = type;
     }
 

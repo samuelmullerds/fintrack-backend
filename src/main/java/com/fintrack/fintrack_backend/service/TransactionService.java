@@ -9,14 +9,15 @@ import com.fintrack.fintrack_backend.dto.CreateTransactionDTO;
 import com.fintrack.fintrack_backend.dto.DashboardResponse;
 import com.fintrack.fintrack_backend.dto.TransactionResponseDTO;
 import com.fintrack.fintrack_backend.exception.ResourceNotFoundException;
+import com.fintrack.fintrack_backend.dto.TransactionType;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-
 import org.springframework.stereotype.Service;
 import org.springframework.lang.NonNull;
 
 import java.util.List;
+import java.math.BigDecimal;
 @Service
 
 public class TransactionService {
@@ -86,19 +87,19 @@ public class TransactionService {
     public DashboardResponse getDashboard(Long userId){
         List<Transaction> transactions = transactionRepository.findByUserId(userId);
 
-        double totalIncome = 0;
-        double totalExpense = 0;
+        BigDecimal totalIncome = BigDecimal.ZERO;
+        BigDecimal totalExpense = BigDecimal.ZERO;
 
         for(Transaction t : transactions){
-            if ("income".equalsIgnoreCase(t.getType())){
-                totalIncome += t.getAmount();
+            if (TransactionType.INCOME == (t.getType())){
+                totalIncome = totalIncome.add(t.getAmount());
             }
-            if ("expense".equalsIgnoreCase(t.getType())){
-                totalExpense += t.getAmount();
+            if (TransactionType.EXPENSE == (t.getType())){
+                totalExpense = totalExpense.add(t.getAmount());
             }
         }
 
-        double balance = totalIncome - totalExpense;
+        BigDecimal balance = totalIncome.subtract(totalExpense);
 
         return new DashboardResponse(balance, totalIncome, totalExpense);
     }
