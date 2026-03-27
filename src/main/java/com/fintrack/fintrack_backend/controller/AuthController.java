@@ -1,9 +1,12 @@
 package com.fintrack.fintrack_backend.controller;
+import com.fintrack.fintrack_backend.dto.ForgotPasswordRequest;
 import com.fintrack.fintrack_backend.dto.LoginRequest;
 import com.fintrack.fintrack_backend.dto.LoginResponse;
 import com.fintrack.fintrack_backend.dto.RegisterRequest;
+import com.fintrack.fintrack_backend.dto.ResetPasswordRequest;
 import com.fintrack.fintrack_backend.dto.UserProfileResponse;
 import com.fintrack.fintrack_backend.service.AuthService;
+import com.fintrack.fintrack_backend.service.PasswordResetService;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
@@ -22,8 +25,11 @@ import io.swagger.v3.oas.annotations.Parameter;
 @Tag(name = "Authentication", description = "Endpoints para autenticação de usuários")
 public class AuthController {
     private final AuthService authService;
-    public AuthController(AuthService authService) {
+    private final PasswordResetService passwordResetService;
+
+    public AuthController(AuthService authService, PasswordResetService passwordResetService) {
         this.authService = authService;
+        this.passwordResetService = passwordResetService;
     }
 
     @PostMapping("/login")
@@ -44,6 +50,22 @@ public class AuthController {
     public UserProfileResponse getCurrentUser(Authentication authentication) {
         String email = authentication.getName();
         return authService.getCurrentUser(email);
+    }
+
+    @PostMapping("/forgot-password")
+    @Operation(summary = "Solicitar redefinição de senha",
+               description = "Envia um link de redefinição para o e-mail informado. Sempre retorna 200 por segurança.")
+    public ResponseEntity<Void> forgotPassword(@Valid @RequestBody ForgotPasswordRequest request) {
+        passwordResetService.forgotPassword(request);
+        return ResponseEntity.ok().build();
+    }
+ 
+    @PostMapping("/reset-password")
+    @Operation(summary = "Redefinir senha",
+               description = "Redefine a senha usando o token recebido por e-mail")
+    public ResponseEntity<Void> resetPassword(@Valid @RequestBody ResetPasswordRequest request) {
+        passwordResetService.resetPassword(request);
+        return ResponseEntity.ok().build();
     }
     }
 
