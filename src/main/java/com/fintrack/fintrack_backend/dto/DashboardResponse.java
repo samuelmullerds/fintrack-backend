@@ -2,38 +2,38 @@ package com.fintrack.fintrack_backend.dto;
 import java.math.BigDecimal;
 
 public class DashboardResponse {
-    private BigDecimal income;
-    private BigDecimal expense;
-    private BigDecimal balance;
+    private BigDecimal Income;
+    private BigDecimal Expense;
+    private BigDecimal Balance;
 
     public DashboardResponse(BigDecimal balance, BigDecimal income, BigDecimal expense) {
-        this.balance = balance;
-        this.income = income;
-        this.expense = expense;
+        this.Balance = balance;
+        this.Income = income;
+        this.Expense = expense;
     }
 
     public BigDecimal getIncome() {
-        return income;
+        return Income;
     }
 
     public void setIncome(BigDecimal income) {
-        this.income = income;
+        Income = income;
     }
 
     public BigDecimal getExpense(){
-        return expense;
+        return Expense;
     }
 
     public void setExpense(BigDecimal expense){
-        this.expense = expense;
+        Expense = expense;
     }
 
     public BigDecimal getBalance() {
-        return balance;
+        return Balance;
     }
 
     public void setBalance(BigDecimal balance) {
-        this.balance = balance;
+        Balance = balance;
     }
     
 }
