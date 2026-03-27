@@ -85,19 +85,12 @@ public class TransactionService {
     }
 
     public DashboardResponse getDashboard(Long userId){
-        List<Transaction> transactions = transactionRepository.findByUserId(userId);
 
-        BigDecimal totalIncome = BigDecimal.ZERO;
-        BigDecimal totalExpense = BigDecimal.ZERO;
+        BigDecimal totalIncome = transactionRepository.sumByUserAndType(userId, TransactionType.INCOME);
+        BigDecimal totalExpense = transactionRepository.sumByUserAndType(userId, TransactionType.EXPENSE);
 
-        for(Transaction t : transactions){
-            if (TransactionType.INCOME == (t.getType())){
-                totalIncome = totalIncome.add(t.getAmount());
-            }
-            if (TransactionType.EXPENSE == (t.getType())){
-                totalExpense = totalExpense.add(t.getAmount());
-            }
-        }
+        if (totalIncome == null) totalIncome = BigDecimal.ZERO;
+        if (totalExpense == null) totalExpense = BigDecimal.ZERO;
 
         BigDecimal balance = totalIncome.subtract(totalExpense);
 
@@ -106,7 +99,7 @@ public class TransactionService {
 
     public List<CategorySummaryResponse> getExpenseSummary(Long userId) {
 
-        return transactionRepository.getExpenseSummaryByUser(userId);
+        return transactionRepository.getExpenseSummaryByUser(userId, TransactionType.EXPENSE);
     }
 
     public Page<TransactionResponseDTO> listTransactions(Long userId, Pageable pageable){

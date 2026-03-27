@@ -1,6 +1,8 @@
 package com.fintrack.fintrack_backend.model;
 
 import jakarta.persistence.*;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -19,6 +21,7 @@ public class Transaction {
 
     private String category;
 
+    @Enumerated(EnumType.STRING)
     private TransactionType type;
 
     private LocalDate date;
@@ -60,6 +63,7 @@ public class Transaction {
         this.category = category;
     }
 
+    @Enumerated(EnumType.STRING)
     public TransactionType getType() {
         return type;
     }

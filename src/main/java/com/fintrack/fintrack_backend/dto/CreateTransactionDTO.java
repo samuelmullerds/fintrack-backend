@@ -13,7 +13,7 @@ public class CreateTransactionDTO {
     private BigDecimal amount;
     @NotBlank
     private String category;
-    @NotBlank
+    @NotNull
     private TransactionType type;
     @NotNull
     private LocalDate date;

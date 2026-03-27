@@ -1,10 +1,12 @@
 package com.fintrack.fintrack_backend.dto;
 
+import java.math.BigDecimal;
+
 public class CategorySummaryResponse {
     private String category;
-    private double total;
+    private BigDecimal total;
 
-    public CategorySummaryResponse(String category, double total) {
+    public CategorySummaryResponse(String category, BigDecimal total) {
         this.category = category;
         this.total = total;
     }
@@ -17,11 +19,11 @@ public class CategorySummaryResponse {
         this.category = category;
     }
 
-    public double getTotal() {
+    public BigDecimal getTotal() {
         return total;
     }
 
-    public void setTotal(double total) {
+    public void setTotal(BigDecimal total) {
         this.total = total;
     }
 }
