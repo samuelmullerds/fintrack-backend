@@ -26,7 +26,7 @@ public class PasswordResetService {
     private final JavaMailSender mailSender;
     private final PasswordEncoder passwordEncoder;
 
-    private static final String RESET_LINK_BASE = "fintrack://reset-password?token=";
+    private static final String RESET_LINK_BASE = "http://localhost:3000/reset-password?token=";
     private static final int TOKEN_EXPIRATION_MINUTES = 30;
 
     public PasswordResetService(
@@ -82,8 +82,6 @@ public class PasswordResetService {
     }
 
     public void resetPassword(ResetPasswordRequest request) {
-
-        // Busca todos tokens não utilizados
         List<PasswordResetToken> tokens = tokenRepository.findAllByUsedFalse();
 
         PasswordResetToken validToken = null;
